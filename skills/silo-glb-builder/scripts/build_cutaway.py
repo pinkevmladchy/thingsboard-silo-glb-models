@@ -5,8 +5,7 @@ Outputs these named meshes:
   - Silo.Cutaway          : shell + ceiling + cone roof + rings + ribs
   - Silo.Cutaway_Floor    : inner floor
   - Grain_Volume          : orange wavy grain heap (scale.y to control level)
-  - Sensor_Cable          : vertical rod connecting sensors
-  - Cable_Cap             : mount cap at the top
+  - Cable                 : vertical rod + mount cap (one mesh)
   - Sensor.001, .002, ... : individual sensor spheres (each with unique material)
   - Ground                : white ground plane
 
@@ -170,7 +169,7 @@ def build_cutaway(config: dict) -> trimesh.Scene:
                                      salt=10 + i)
         scene.add_geometry(sphere, node_name=name, geom_name=name)
 
-    # ---- Sensor cable ----
+    # ---- Sensor cable (rod + top cap as ONE mesh) ----
     if cfg["add_cable"] and sensors:
         top_y = max(float(s.get("y", 0)) for s in sensors)
         cable_top_y = top_y + 0.25
@@ -178,20 +177,18 @@ def build_cutaway(config: dict) -> trimesh.Scene:
         cable_h = cable_top_y - cable_bottom_y
         cable_r = float(cfg["cable_radius"])
 
-        cable = trimesh.creation.cylinder(radius=cable_r, height=cable_h, sections=24)
-        cable.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2, [1, 0, 0]))
-        cable.apply_translation([0, cable_bottom_y + cable_h / 2, 0])
-        cable.visual = unique_pbr("Sensor_Cable_Mat", CABLE_COLOR,
-                                    metallic=0.4, roughness=0.5, salt=100)
-        scene.add_geometry(cable, node_name="Sensor_Cable", geom_name="Sensor_Cable")
+        rod = trimesh.creation.cylinder(radius=cable_r, height=cable_h, sections=24)
+        rod.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2, [1, 0, 0]))
+        rod.apply_translation([0, cable_bottom_y + cable_h / 2, 0])
 
         cap = trimesh.creation.cylinder(radius=cable_r * 2.5, height=0.04, sections=24)
         cap.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2, [1, 0, 0]))
         cap.apply_translation([0, cable_top_y + 0.02, 0])
-        cap.visual = unique_pbr("Cable_Cap_Mat", CABLE_COLOR,
-                                  metallic=0.4, roughness=0.5, salt=101)
-        scene.add_geometry(cap, node_name="Cable_Cap",
-                           geom_name="Cable_Cap")
+
+        cable = trimesh.util.concatenate([rod, cap])
+        cable.visual = unique_pbr("Cable_Mat", CABLE_COLOR,
+                                    metallic=0.4, roughness=0.5, salt=100)
+        scene.add_geometry(cable, node_name="Cable", geom_name="Cable")
 
     # ---- Ground ----
     if cfg["add_ground"]:

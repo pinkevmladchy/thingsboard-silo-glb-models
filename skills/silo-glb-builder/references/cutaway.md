@@ -99,8 +99,7 @@ python build_cutaway.py --config /tmp/cutaway.json --output cutaway.glb
 | `Silo.Cutaway`        | Body + ceiling + cone roof + rings + ribs (light gray) |
 | `Silo.Cutaway_Floor`  | Inner floor disk (darker gray) |
 | `Grain_Volume`        | Orange grain heap with wavy top (double-sided) |
-| `Sensor_Cable`        | Central vertical cable (dark gray, if `add_cable`) |
-| `Cable_Cap`           | Mounting cap at the top of the cable |
+| `Cable`               | Central vertical cable + mount cap, one mesh (if `add_cable`) |
 | `Sensor.NNN`          | One mesh per sensor (teal, each with its own material) |
 | `Ground`              | White ground plane (if `add_ground`) |
 
