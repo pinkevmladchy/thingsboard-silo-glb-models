@@ -75,8 +75,14 @@ For each silo in the grid, the GLB will contain TWO meshes (with matching number
 `Silo.001` and `Hardware.001` refer to the same silo's body and its hardware respectively.
 
 Plus, if enabled:
-- `Warehouse`           — building + roof slab (light gray)
+- `Warehouse`           — main wall body (light cool gray, industrial style)
+- `Warehouse_Trim`      — vertical metal-cladding ribs + roof + ridge + vent strip + door segments (darker gray)
+- `Warehouse_Doors`     — two rolling-style doors on the front (medium gray)
 - `Ground`              — flat plane (white)
+
+The warehouse is a long, low industrial building (4.4 × 1.2 × 1.6) with
+vertical ribbed metal cladding, a mono-pitch roof, and two rolling doors on
+the front. It sits to the left of the silo grid with a 1.2-unit gap.
 
 ## Tips when calling this from the skill
 
